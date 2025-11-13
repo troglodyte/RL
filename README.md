@@ -5,7 +5,7 @@
 ## TBD Theme
 * Kill Them with Kindness ?name
 * Fighting off Karens, road ragers, unkind customer service employees using Kindness
-* Find and equip encouraging phrases as 'weapons' to defeat antagonistic enemies in the dungeon
+* Find and equip encouraging, and defusing phrases as 'weapons' to defeat antagonistic enemies in the dungeon
 * add other nonsense to the mix
 
 ### Following references 
