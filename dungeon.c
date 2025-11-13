@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -11,7 +12,8 @@
 
 typedef enum {
     TILE_WALL,
-    TILE_FLOOR
+    TILE_FLOOR,
+    TILE_DOOR,
 } TileType;
 
 typedef struct {
@@ -33,10 +35,10 @@ void init_map(void) {
 
 int rects_intersect(Room a, Room b) {
     // Add a 1-tile margin so rooms aren't touching
-    if (a.x - 1 > b.x + b.w) return 0;
-    if (b.x - 1 > a.x + a.w) return 0;
-    if (a.y - 1 > b.y + b.h) return 0;
-    if (b.y - 1 > a.y + a.h) return 0;
+    if (a.x - 1 > b.x + b.w) return 0; // horizontal - starting pos + width
+    if (b.x - 1 > a.x + a.w) return 0; // same but reversed
+    if (a.y - 1 > b.y + b.h) return 0; // vertical height collision
+    if (b.y - 1 > a.y + a.h) return 0; // reversed
     return 1;
 }
 
@@ -50,20 +52,49 @@ void carve_room(Room room) {
     }
 }
 
+// center, center, y (horizontal row)
 void carve_horz_corridor(int x1, int x2, int y) {
     if (x2 < x1) { int tmp = x1; x1 = x2; x2 = tmp; }
+    bool has_first_door = false;
+    bool has_second_door = false;
     for (int x = x1; x <= x2; x++) {
         if (x >= 0 && x < MAP_W && y >= 0 && y < MAP_H) {
-            map[y][x] = TILE_FLOOR;
+            if (has_first_door == false && map[y][x-1] == TILE_FLOOR && map[y][x] == TILE_WALL) {
+                map[y][x] = TILE_DOOR;
+                has_first_door = true;
+            } else if (has_second_door == false && map[y][x+1] == TILE_FLOOR && map[y][x] == TILE_WALL) {
+                map[y][x] = TILE_DOOR;
+                has_second_door = true;
+            } else {
+                map[y][x] = TILE_FLOOR;
+            }
         }
     }
 }
 
+/**
+ * todo fix bug on corners:
+ *  #######
+ *  ##.+... <-- unnecessary door
+ *  ##+#### <-- here too
+ *  ##.###
+ */
 void carve_vert_corridor(int y1, int y2, int x) {
     if (y2 < y1) { int tmp = y1; y1 = y2; y2 = tmp; }
+    bool has_first_door = false;
+    bool has_second_door = false;
     for (int y = y1; y <= y2; y++) {
         if (x >= 0 && x < MAP_W && y >= 0 && y < MAP_H) {
-            map[y][x] = TILE_FLOOR;
+            // map[y][x] = TILE_FLOOR;
+            if (has_first_door == false && map[y-1][x] == TILE_FLOOR && map[y][x] == TILE_WALL) {
+                map[y][x] = TILE_DOOR;
+                has_first_door = true;
+            } else if (has_second_door == false && map[y+1][x] == TILE_FLOOR && map[y][x] == TILE_WALL) {
+                map[y][x] = TILE_DOOR;
+                has_second_door = true;
+            } else {
+                map[y][x] = TILE_FLOOR;
+            }
         }
     }
 }
@@ -117,12 +148,19 @@ void generate_dungeon(void) {
 void print_map(void) {
     for (int y = 0; y < MAP_H; y++) {
         for (int x = 0; x < MAP_W; x++) {
-            char c = '#';
-            if (map[y][x] == TILE_FLOOR) {
-                c = '.';
-                printf("%c", c);
-            } else {
-                printf("\033[36m%c\033[0m", c);
+            switch (map[y][x]) {
+                case TILE_FLOOR:
+                    printf("%c", '.');
+                    break;
+                case TILE_WALL:
+                    printf("\033[36m%c\033[0m", '#');
+                    break;
+                case TILE_DOOR:
+                    printf("\033[31m%c\033[0m", '+');
+                    break;
+                default:
+                    break;
+
             }
         }
         putchar('\n');
