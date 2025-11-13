@@ -1,8 +1,14 @@
-# Roguelike - Kill Them with Kindness
+# Roguelike
 * Exploring Python 3.14 and libtcod as an option
 * Exploring C as an option as well
 
-### Following 
+## TBD Theme
+* Kill Them with Kindness ?name
+* Fighting off Karens, road ragers, unkind customer service employees using Kindness
+* Find and equip encouraging phrases as 'weapons' to defeat antagonistic enemies in the dungeon
+* add other nonsense to the mix
+
+### Following references 
 * Python
   * https://www.roguebasin.com/index.php/Complete_Roguelike_Tutorial,_using_python%2Blibtcod,_part_1
   * https://python-tcod.readthedocs.io/en/latest/tcod/getting-started.html
