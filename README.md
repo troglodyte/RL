@@ -3,10 +3,13 @@
 * Exploring C as an option as well
 
 ## TBD Theme
-* Kill Them with Kindness ?name
+* Kill Them with Kindness ?
 * Fighting off Karens, road ragers, unkind customer service employees using Kindness
 * Find and equip encouraging, and defusing phrases as 'weapons' to defeat antagonistic enemies in the dungeon
 * add other nonsense to the mix
+* Cyberpunk theme?
+* trapped in asteroid caves
+* fighting off robots and androids
 
 ### Following references 
 * Python
